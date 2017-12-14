@@ -1,11 +1,4 @@
 [Desktop Entry]
-Version=0.0.0
-Type=Application
 Name=yaq
-GenericName=yaq
-Comment=yet another acquisition
-TryeExec=yaq
-Exec=yaq %F
-Categories=Science;Qt;
-Terminal=false
-StartupNotifiy=true
+Exec=yaq
+Type=Application

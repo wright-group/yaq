@@ -5,6 +5,7 @@
 
 
 import os
+import sys
 
 from setuptools import setup, find_packages
 
@@ -12,18 +13,15 @@ from setuptools import setup, find_packages
 # --- define -------------------------------------------------------------------------------------
 
 
-def package_files(directory):
-    paths = []
-    for (path, directories, filenames) in os.walk(directory):
-        for filename in filenames:
-            paths.append(os.path.join('..', path, filename))
-    return paths
-
-
 here = os.path.abspath(os.path.dirname(__file__))
 
 
 # --- setup --------------------------------------------------------------------------------------
+
+
+data_files = []
+if sys.platform.startswith('linux'):
+    data_files.append(('/usr/share/applications', ['scripts/yaq.desktop']))
 
 
 extra_files = []
@@ -46,6 +44,7 @@ setup(
     name='yaq',
     packages=find_packages(),
     package_data={'': extra_files},
+    data_files=data_files,
     install_requires=required,
     version=version,
     description='Yet another acquisition.',
