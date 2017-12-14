@@ -1,13 +1,13 @@
 """yaq main window."""
 
 
-# --- import -------------------------------------------------------------------------------------
+# --- import --------------------------------------------------------------------------------------
 
 
 from qtpy import QtGui, QtWidgets
 
 
-# --- class --------------------------------------------------------------------------------------
+# --- class ---------------------------------------------------------------------------------------
 
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -15,23 +15,39 @@ class MainWindow(QtWidgets.QMainWindow):
     def __init__(self, app):
         super().__init__()
         self.app = app
-        print('hello world this is yaq MainWindow.__init__')
 
     def create_central_widget(self):
-        print('hello world this is yaq MainWindow.create_main_frame')
         self.central_widget = QtWidgets.QWidget()
-        hbox = QtWidgets.QHBoxLayout()
-        # testing --------------------------------------------------------------------------------
-        testing_box = QtWidgets.QVBoxLayout()
-        widget = QtWidgets.QLabel('this is a qlabel on top of yaq')
-        testing_box.addWidget(widget)
-        hbox.addLayout(testing_box)
-        # finish ---------------------------------------------------------------------------------
-        self.central_widget.setLayout(hbox)
+        layout = QtWidgets.QGridLayout()
+        # queue button ----------------------------------------------------------------------------
+        queue_button = QtWidgets.QPushButton('QUEUE')
+        queue_button.setFixedHeight(30)
+        queue_button.setFixedWidth(300)
+        queue_button.clicked.connect(self.on_queue_clicked)
+        layout.addWidget(queue_button, 0, 0)
+        # progress bar ----------------------------------------------------------------------------
+        progress_bar = QtWidgets.QProgressBar()
+        progress_bar.setFixedHeight(30)
+        layout.addWidget(progress_bar, 0, 1)
+        # hardware scroll area --------------------------------------------------------------------
+        # TODO
+        # queue scroll area -----------------------------------------------------------------------
+        # TODO
+        # tabs ------------------------------------------------------------------------------------
+        self.tabs = QtWidgets.QTabWidget()
+        layout.addWidget(self.tabs, 1, 1)
+        # finish ----------------------------------------------------------------------------------
+        self.central_widget.setLayout(layout)
         self.setCentralWidget(self.central_widget)
 
+    def on_shutdown_clicked(self):
+        print('on shutdown clicked')
 
-# --- main ---------------------------------------------------------------------------------------
+    def on_queue_clicked(self):
+        print('on queue clicked')
+
+
+# --- main ----------------------------------------------------------------------------------------
 
 
 def main():
