@@ -44,3 +44,4 @@ coverage.xml
 
 # vim
 *.sw?
+*~
