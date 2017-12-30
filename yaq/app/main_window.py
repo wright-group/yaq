@@ -4,7 +4,21 @@
 # --- import --------------------------------------------------------------------------------------
 
 
+import appdirs
+import ctypes
+import os
+import sys
+
+import qtpy
 from qtpy import QtGui, QtWidgets
+
+from ..__version__ import __version__
+
+
+# --- define --------------------------------------------------------------------------------------
+
+
+here = os.path.abspath(os.path.basename(__file__))
 
 
 # --- class ---------------------------------------------------------------------------------------
@@ -15,6 +29,30 @@ class MainWindow(QtWidgets.QMainWindow):
     def __init__(self, app):
         super().__init__()
         self.app = app
+        self.__version__ = __version__
+        # title
+        title = 'yaq : yet another acquisition'
+        title += ' | version %s' % self.__version__
+        title += ' | Python %i.%i' % (sys.version_info[0], sys.version_info[1])
+        title += ' | %s' % qtpy.API
+        self.setWindowTitle(title)
+        # platform specific
+        if os.name == 'posix':
+            pass
+        elif os.name == 'nt':
+            # must have unique app ID
+            ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID('yaq')
+            # icon
+            p = os.path.join(appdirs.user_data_dir(), 'yaq', 'icon.ico')
+            self.setWindowIcon(QtGui.QIcon(p))
+        
+    def center(self):
+        """Center the window within the current screen."""
+        raise NotImplementedError
+        # TODO: finish
+        screen = QtGui.QDesktopWidget().screenGeometry() 
+        size = self.geometry() 
+        self.move((screen.width()-size.width())/2, (screen.height()-size.height())/2)
 
     def create_central_widget(self):
         self.central_widget = QtWidgets.QWidget()
@@ -54,8 +92,8 @@ def main():
     """Initialize application and main window."""
     app = QtWidgets.QApplication(['yaq'])
     main_window = MainWindow(app)
-    main_window.show()
     main_window.create_central_widget()
+    main_window.showMaximized()
     app.exec_()
 
 

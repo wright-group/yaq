@@ -27,14 +27,6 @@ flycheck_*.el
 .projectile
 *.#*
 
-# images
-*.jpg
-*.gif
-*.png
-!logo/logo.png
-*.svg
-*.ico
-
 # tests / coverage reports
 .coverage
 .coverage.*
