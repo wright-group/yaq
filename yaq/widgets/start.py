@@ -8,7 +8,7 @@ import appdirs
 import os
 import shutil
 
-from yaq.app import main_window
+from yaq.widgets import main_window
 
 
 # --- define --------------------------------------------------------------------------------------

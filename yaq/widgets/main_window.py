@@ -10,15 +10,22 @@ import os
 import sys
 
 import qtpy
-from qtpy import QtGui, QtWidgets
+from qtpy import QtCore, QtGui, QtWidgets
 
 from ..__version__ import __version__
+from ..core.ini import INI
+from .progress_bar import ProgressBar
+from .push_button import PushButton
+from .tab_widget import TabWidget
+from .yaq_widget import YAQWidget
 
 
 # --- define --------------------------------------------------------------------------------------
 
 
-here = os.path.abspath(os.path.basename(__file__))
+here = os.path.abspath(os.path.dirname(__file__))
+
+colors = INI(os.path.join(here, 'colors.ini')).dictionary['night']
 
 
 # --- class ---------------------------------------------------------------------------------------
@@ -36,6 +43,12 @@ class MainWindow(QtWidgets.QMainWindow):
         title += ' | Python %i.%i' % (sys.version_info[0], sys.version_info[1])
         title += ' | %s' % qtpy.API
         self.setWindowTitle(title)
+        # style sheet
+        style_sheet = 'QWidget{background-color: %s}' % colors['background']
+        self.setStyleSheet(style_sheet)
+        # disable 'x'
+        self.setWindowFlags(self.windowFlags() | QtCore.Qt.CustomizeWindowHint)
+        self.setWindowFlags(self.windowFlags() & ~QtCore.Qt.WindowCloseButtonHint)
         # platform specific
         if os.name == 'posix':
             pass
@@ -58,28 +71,33 @@ class MainWindow(QtWidgets.QMainWindow):
         self.central_widget = QtWidgets.QWidget()
         layout = QtWidgets.QGridLayout()
         # queue button ----------------------------------------------------------------------------
-        queue_button = QtWidgets.QPushButton('QUEUE')
-        queue_button.setFixedHeight(30)
+        queue_button = PushButton('RUN QUEUE', 'green')
         queue_button.setFixedWidth(300)
         queue_button.clicked.connect(self.on_queue_clicked)
         layout.addWidget(queue_button, 0, 0)
         # progress bar ----------------------------------------------------------------------------
-        progress_bar = QtWidgets.QProgressBar()
-        progress_bar.setFixedHeight(30)
+        progress_bar = ProgressBar()
         layout.addWidget(progress_bar, 0, 1)
         # hardware scroll area --------------------------------------------------------------------
         # TODO
-        # queue scroll area -----------------------------------------------------------------------
-        # TODO
         # tabs ------------------------------------------------------------------------------------
-        self.tabs = QtWidgets.QTabWidget()
+        self.tabs = TabWidget()
+        self.tabs.add_tab('YAQ')
+        self.tabs.add_tab('MOTOR')
+        self.tabs.add_tab('SENSORY')
+        self.tabs.add_tab('AUTONOMIC')
+        self.tabs.add_tab('SOMATIC')
         layout.addWidget(self.tabs, 1, 1)
         # finish ----------------------------------------------------------------------------------
         self.central_widget.setLayout(layout)
         self.setCentralWidget(self.central_widget)
+        
+    def initialize_tab_widgets(self):
+        YAQWidget(self, self.tabs.widgets['YAQ'])
 
     def on_shutdown_clicked(self):
         print('on shutdown clicked')
+        self.close()
 
     def on_queue_clicked(self):
         print('on queue clicked')
@@ -94,6 +112,7 @@ def main():
     main_window = MainWindow(app)
     main_window.create_central_widget()
     main_window.showMaximized()
+    main_window.initialize_tab_widgets()
     app.exec_()
 
 

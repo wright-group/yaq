@@ -62,5 +62,5 @@ setup(
                  'Programming Language :: Python :: 3.4',
                  'Programming Language :: Python :: 3.5',
                  'Topic :: Scientific/Engineering'],
-    entry_points={'gui_scripts': ['yaq=yaq.app.start:main']}
+    entry_points={'gui_scripts': ['yaq=yaq.widgets.start:main']}
 )

@@ -1,4 +1,5 @@
 # from conda: conda create -n yaq --file requirements.txt
 # from pip: pip install -r requirements.txt
+pyqtgraph
 qtpy
 WrightTools
