@@ -5,6 +5,7 @@
 
 
 import collections
+import logging
 import os
 
 from qtpy import QtWidgets
@@ -18,6 +19,8 @@ from ..core.ini import INI
 here = os.path.abspath(os.path.dirname(__file__))
 
 colors = INI(os.path.join(here, 'colors.ini')).dictionary['night']
+
+log = logging.getLogger(__name__)
 
 
 # --- class ---------------------------------------------------------------------------------------
@@ -37,6 +40,7 @@ class TabWidget(QtWidgets.QTabWidget):
         style_sheet += 'QTabBar::tab:selected{color: %s}' % colors['yellow']
         style_sheet += 'QTabBar::tab:!selected{color: %s}' % colors['foreground']
         self.setStyleSheet(style_sheet)
+        log.debug('TabWidget initialized')
         
     def add_tab(self, name):
         widget = QtWidgets.QWidget()
